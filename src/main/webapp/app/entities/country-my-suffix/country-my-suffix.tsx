@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-import { ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import { ICrudGetAllAction, TextFormat, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -66,6 +66,9 @@ export const CountryMySuffix = (props: ICountryMySuffixProps) => {
                 <th className="hand" onClick={sort('countryName')}>
                   Country Name <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('createdDate')}>
+                  Created Date <FontAwesomeIcon icon="sort" />
+                </th>
                 <th>
                   Region <FontAwesomeIcon icon="sort" />
                 </th>
@@ -81,6 +84,9 @@ export const CountryMySuffix = (props: ICountryMySuffixProps) => {
                     </Button>
                   </td>
                   <td>{country.countryName}</td>
+                  <td>
+                    <TextFormat type="date" value={country.createdDate} format={APP_DATE_FORMAT} />
+                  </td>
                   <td>{country.regionId ? <Link to={`region-my-suffix/${country.regionId}`}>{country.regionId}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

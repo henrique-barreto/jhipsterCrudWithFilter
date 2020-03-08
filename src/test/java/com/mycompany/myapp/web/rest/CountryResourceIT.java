@@ -25,8 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
+import static com.mycompany.myapp.web.rest.TestUtil.sameInstant;
 import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -41,6 +46,10 @@ public class CountryResourceIT {
 
     private static final String DEFAULT_COUNTRY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_COUNTRY_NAME = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_CREATED_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_CREATED_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_CREATED_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     @Autowired
     private CountryRepository countryRepository;
@@ -93,7 +102,8 @@ public class CountryResourceIT {
      */
     public static Country createEntity(EntityManager em) {
         Country country = new Country()
-            .countryName(DEFAULT_COUNTRY_NAME);
+            .countryName(DEFAULT_COUNTRY_NAME)
+            .createdDate(DEFAULT_CREATED_DATE);
         return country;
     }
     /**
@@ -104,7 +114,8 @@ public class CountryResourceIT {
      */
     public static Country createUpdatedEntity(EntityManager em) {
         Country country = new Country()
-            .countryName(UPDATED_COUNTRY_NAME);
+            .countryName(UPDATED_COUNTRY_NAME)
+            .createdDate(UPDATED_CREATED_DATE);
         return country;
     }
 
@@ -130,6 +141,7 @@ public class CountryResourceIT {
         assertThat(countryList).hasSize(databaseSizeBeforeCreate + 1);
         Country testCountry = countryList.get(countryList.size() - 1);
         assertThat(testCountry.getCountryName()).isEqualTo(DEFAULT_COUNTRY_NAME);
+        assertThat(testCountry.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
     }
 
     @Test
@@ -164,7 +176,8 @@ public class CountryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(country.getId().intValue())))
-            .andExpect(jsonPath("$.[*].countryName").value(hasItem(DEFAULT_COUNTRY_NAME)));
+            .andExpect(jsonPath("$.[*].countryName").value(hasItem(DEFAULT_COUNTRY_NAME)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(sameInstant(DEFAULT_CREATED_DATE))));
     }
     
     @Test
@@ -178,7 +191,8 @@ public class CountryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(country.getId().intValue()))
-            .andExpect(jsonPath("$.countryName").value(DEFAULT_COUNTRY_NAME));
+            .andExpect(jsonPath("$.countryName").value(DEFAULT_COUNTRY_NAME))
+            .andExpect(jsonPath("$.createdDate").value(sameInstant(DEFAULT_CREATED_DATE)));
     }
 
 
@@ -281,6 +295,111 @@ public class CountryResourceIT {
 
     @Test
     @Transactional
+    public void getAllCountriesByCreatedDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate equals to DEFAULT_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.equals=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate equals to UPDATED_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.equals=" + UPDATED_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate not equals to DEFAULT_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.notEquals=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate not equals to UPDATED_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.notEquals=" + UPDATED_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate in DEFAULT_CREATED_DATE or UPDATED_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.in=" + DEFAULT_CREATED_DATE + "," + UPDATED_CREATED_DATE);
+
+        // Get all the countryList where createdDate equals to UPDATED_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.in=" + UPDATED_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate is not null
+        defaultCountryShouldBeFound("createdDate.specified=true");
+
+        // Get all the countryList where createdDate is null
+        defaultCountryShouldNotBeFound("createdDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate is greater than or equal to DEFAULT_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.greaterThanOrEqual=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate is greater than or equal to UPDATED_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.greaterThanOrEqual=" + UPDATED_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate is less than or equal to DEFAULT_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.lessThanOrEqual=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate is less than or equal to SMALLER_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.lessThanOrEqual=" + SMALLER_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate is less than DEFAULT_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.lessThan=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate is less than UPDATED_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.lessThan=" + UPDATED_CREATED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCreatedDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+
+        // Get all the countryList where createdDate is greater than DEFAULT_CREATED_DATE
+        defaultCountryShouldNotBeFound("createdDate.greaterThan=" + DEFAULT_CREATED_DATE);
+
+        // Get all the countryList where createdDate is greater than SMALLER_CREATED_DATE
+        defaultCountryShouldBeFound("createdDate.greaterThan=" + SMALLER_CREATED_DATE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCountriesByRegionIsEqualToSomething() throws Exception {
         // Initialize the database
         countryRepository.saveAndFlush(country);
@@ -306,7 +425,8 @@ public class CountryResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(country.getId().intValue())))
-            .andExpect(jsonPath("$.[*].countryName").value(hasItem(DEFAULT_COUNTRY_NAME)));
+            .andExpect(jsonPath("$.[*].countryName").value(hasItem(DEFAULT_COUNTRY_NAME)))
+            .andExpect(jsonPath("$.[*].createdDate").value(hasItem(sameInstant(DEFAULT_CREATED_DATE))));
 
         // Check, that the count call also returns 1
         restCountryMockMvc.perform(get("/api/countries/count?sort=id,desc&" + filter))
@@ -354,7 +474,8 @@ public class CountryResourceIT {
         // Disconnect from session so that the updates on updatedCountry are not directly saved in db
         em.detach(updatedCountry);
         updatedCountry
-            .countryName(UPDATED_COUNTRY_NAME);
+            .countryName(UPDATED_COUNTRY_NAME)
+            .createdDate(UPDATED_CREATED_DATE);
         CountryDTO countryDTO = countryMapper.toDto(updatedCountry);
 
         restCountryMockMvc.perform(put("/api/countries")
@@ -367,6 +488,7 @@ public class CountryResourceIT {
         assertThat(countryList).hasSize(databaseSizeBeforeUpdate);
         Country testCountry = countryList.get(countryList.size() - 1);
         assertThat(testCountry.getCountryName()).isEqualTo(UPDATED_COUNTRY_NAME);
+        assertThat(testCountry.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
     }
 
     @Test

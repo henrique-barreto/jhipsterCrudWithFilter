@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { ICrudGetAction } from 'react-jhipster';
+import { ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -29,6 +29,12 @@ export const CountryMySuffixDetail = (props: ICountryMySuffixDetailProps) => {
             <span id="countryName">Country Name</span>
           </dt>
           <dd>{countryEntity.countryName}</dd>
+          <dt>
+            <span id="createdDate">Created Date</span>
+          </dt>
+          <dd>
+            <TextFormat value={countryEntity.createdDate} type="date" format={APP_DATE_FORMAT} />
+          </dd>
           <dt>Region</dt>
           <dd>{countryEntity.regionId ? countryEntity.regionId : ''}</dd>
         </dl>

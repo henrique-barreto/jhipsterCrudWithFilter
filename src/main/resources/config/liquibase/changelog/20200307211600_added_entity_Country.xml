@@ -19,11 +19,15 @@
             <column name="country_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
             <column name="region_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_country_region_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="country" columnName="created_date" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20200307211600-1-relations" author="jhipster">
@@ -46,6 +50,7 @@
                   tableName="country">
             <column name="id" type="numeric"/>
             <column name="country_name" type="string"/>
+            <column name="created_date" type="datetime"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

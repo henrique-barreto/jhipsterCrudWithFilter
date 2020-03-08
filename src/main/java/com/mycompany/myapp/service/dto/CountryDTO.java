@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,6 +12,8 @@ public class CountryDTO implements Serializable {
     private Long id;
 
     private String countryName;
+
+    private ZonedDateTime createdDate;
 
 
     private Long regionId;
@@ -29,6 +32,14 @@ public class CountryDTO implements Serializable {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Long getRegionId() {
@@ -65,6 +76,7 @@ public class CountryDTO implements Serializable {
         return "CountryDTO{" +
             "id=" + getId() +
             ", countryName='" + getCountryName() + "'" +
+            ", createdDate='" + getCreatedDate() + "'" +
             ", regionId=" + getRegionId() +
             "}";
     }

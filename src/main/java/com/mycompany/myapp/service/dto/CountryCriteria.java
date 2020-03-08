@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link com.mycompany.myapp.domain.Country} entity. This class is used
@@ -28,6 +29,8 @@ public class CountryCriteria implements Serializable, Criteria {
 
     private StringFilter countryName;
 
+    private ZonedDateTimeFilter createdDate;
+
     private LongFilter regionId;
 
     public CountryCriteria() {
@@ -36,6 +39,7 @@ public class CountryCriteria implements Serializable, Criteria {
     public CountryCriteria(CountryCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.countryName = other.countryName == null ? null : other.countryName.copy();
+        this.createdDate = other.createdDate == null ? null : other.createdDate.copy();
         this.regionId = other.regionId == null ? null : other.regionId.copy();
     }
 
@@ -60,6 +64,14 @@ public class CountryCriteria implements Serializable, Criteria {
         this.countryName = countryName;
     }
 
+    public ZonedDateTimeFilter getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(ZonedDateTimeFilter createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public LongFilter getRegionId() {
         return regionId;
     }
@@ -81,6 +93,7 @@ public class CountryCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(countryName, that.countryName) &&
+            Objects.equals(createdDate, that.createdDate) &&
             Objects.equals(regionId, that.regionId);
     }
 
@@ -89,6 +102,7 @@ public class CountryCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         countryName,
+        createdDate,
         regionId
         );
     }
@@ -98,6 +112,7 @@ public class CountryCriteria implements Serializable, Criteria {
         return "CountryCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (countryName != null ? "countryName=" + countryName + ", " : "") +
+                (createdDate != null ? "createdDate=" + createdDate + ", " : "") +
                 (regionId != null ? "regionId=" + regionId + ", " : "") +
             "}";
     }

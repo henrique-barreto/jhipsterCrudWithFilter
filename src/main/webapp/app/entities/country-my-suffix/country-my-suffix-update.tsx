@@ -43,6 +43,8 @@ export const CountryMySuffixUpdate = (props: ICountryMySuffixUpdateProps) => {
   }, [props.updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
+    values.createdDate = convertDateTimeToServer(values.createdDate);
+
     if (errors.length === 0) {
       const entity = {
         ...countryEntity,
@@ -81,6 +83,19 @@ export const CountryMySuffixUpdate = (props: ICountryMySuffixUpdateProps) => {
                   Country Name
                 </Label>
                 <AvField id="country-my-suffix-countryName" type="text" name="countryName" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="createdDateLabel" for="country-my-suffix-createdDate">
+                  Created Date
+                </Label>
+                <AvInput
+                  id="country-my-suffix-createdDate"
+                  type="datetime-local"
+                  className="form-control"
+                  name="createdDate"
+                  placeholder={'YYYY-MM-DD HH:mm'}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.countryEntity.createdDate)}
+                />
               </AvGroup>
               <AvGroup>
                 <Label for="country-my-suffix-region">Region</Label>
