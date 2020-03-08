@@ -4,6 +4,10 @@
         {
             "fieldName": "countryName",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "ZonedDateTime"
         }
     ],
     "relationships": [

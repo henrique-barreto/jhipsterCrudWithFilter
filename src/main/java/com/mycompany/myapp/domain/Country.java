@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 /**
  * A Country.
@@ -23,6 +24,9 @@ public class Country implements Serializable {
 
     @Column(name = "country_name")
     private String countryName;
+
+    @Column(name = "created_date")
+    private ZonedDateTime createdDate;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -48,6 +52,19 @@ public class Country implements Serializable {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public Country createdDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
+        return this;
+    }
+
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Region getRegion() {
@@ -85,6 +102,7 @@ public class Country implements Serializable {
         return "Country{" +
             "id=" + getId() +
             ", countryName='" + getCountryName() + "'" +
+            ", createdDate='" + getCreatedDate() + "'" +
             "}";
     }
 }
