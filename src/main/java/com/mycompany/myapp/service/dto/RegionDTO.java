@@ -7,12 +7,12 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Region} entity.
  */
 public class RegionDTO implements Serializable {
-
+    
     private Long id;
 
     private String regionName;
 
-
+    
     public Long getId() {
         return id;
     }

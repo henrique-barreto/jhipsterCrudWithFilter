@@ -35,6 +35,10 @@ export const CountryMySuffixDetail = (props: ICountryMySuffixDetailProps) => {
           <dd>
             <TextFormat value={countryEntity.createdDate} type="date" format={APP_DATE_FORMAT} />
           </dd>
+          <dt>
+            <span id="language">Language</span>
+          </dt>
+          <dd>{countryEntity.language}</dd>
           <dt>Region</dt>
           <dd>{countryEntity.regionId ? countryEntity.regionId : ''}</dd>
         </dl>

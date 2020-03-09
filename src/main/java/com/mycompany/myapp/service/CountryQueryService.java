@@ -97,6 +97,9 @@ public class CountryQueryService extends QueryService<Country> {
             if (criteria.getCreatedDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCreatedDate(), Country_.createdDate));
             }
+            if (criteria.getLanguage() != null) {
+                specification = specification.and(buildSpecification(criteria.getLanguage(), Country_.language));
+            }
             if (criteria.getRegionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRegionId(),
                     root -> root.join(Country_.region, JoinType.LEFT).get(Region_.id)));

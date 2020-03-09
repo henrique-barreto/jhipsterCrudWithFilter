@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 @ApiModel(description = "The Employee entity.")
 public class EmployeeDTO implements Serializable {
-
+    
     private Long id;
 
     /**
@@ -40,7 +40,7 @@ public class EmployeeDTO implements Serializable {
     @ApiModelProperty(value = "Another side of the same relationship")
 
     private Long departmentId;
-
+    
     public Long getId() {
         return id;
     }

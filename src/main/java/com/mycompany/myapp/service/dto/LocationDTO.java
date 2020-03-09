@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 @ApiModel(description = "not an ignored comment")
 public class LocationDTO implements Serializable {
-
+    
     private Long id;
 
     private String streetAddress;
@@ -22,7 +22,7 @@ public class LocationDTO implements Serializable {
 
 
     private Long countryId;
-
+    
     public Long getId() {
         return id;
     }

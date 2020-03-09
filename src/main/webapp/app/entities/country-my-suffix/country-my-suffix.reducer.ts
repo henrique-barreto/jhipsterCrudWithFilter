@@ -131,7 +131,6 @@ export const updateEntity: ICrudPutAction<ICountryMySuffix> = entity => async di
     type: ACTION_TYPES.UPDATE_COUNTRY,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
   return result;
 };
 
@@ -141,7 +140,6 @@ export const deleteEntity: ICrudDeleteAction<ICountryMySuffix> = id => async dis
     type: ACTION_TYPES.DELETE_COUNTRY,
     payload: axios.delete(requestUrl)
   });
-  dispatch(getEntities());
   return result;
 };
 

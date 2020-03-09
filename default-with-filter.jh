@@ -5,6 +5,7 @@ entity Region {
 entity Country {
 	countryName String
     createdDate ZonedDateTime
+    language Language
 }
 
 // an ignored comment

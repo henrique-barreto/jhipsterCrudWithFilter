@@ -8,6 +8,11 @@
         {
             "fieldName": "createdDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "language",
+            "fieldType": "Language",
+            "fieldValues": "FRENCH,ENGLISH,SPANISH"
         }
     ],
     "relationships": [
@@ -30,5 +35,6 @@
     "readOnly": false,
     "clientRootFolder": "",
     "applications": "*",
-    "angularJSSuffix": "mySuffix"
+    "angularJSSuffix": "mySuffix",
+    "embedded": false
 }

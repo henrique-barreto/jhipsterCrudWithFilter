@@ -6,29 +6,25 @@ import com.mycompany.myapp.repository.JobRepository;
 import com.mycompany.myapp.service.JobService;
 import com.mycompany.myapp.service.dto.JobDTO;
 import com.mycompany.myapp.service.mapper.JobMapper;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
@@ -39,6 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link JobResource} REST controller.
  */
 @SpringBootTest(classes = JhipsterCrudWithFilterApp.class)
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@WithMockUser
 public class JobResourceIT {
 
     private static final String DEFAULT_JOB_TITLE = "AAAAAAAAAA";
@@ -66,35 +65,12 @@ public class JobResourceIT {
     private JobService jobService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restJobMockMvc;
 
     private Job job;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final JobResource jobResource = new JobResource(jobService);
-        this.restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -136,7 +112,7 @@ public class JobResourceIT {
         // Create the Job
         JobDTO jobDTO = jobMapper.toDto(job);
         restJobMockMvc.perform(post("/api/jobs")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isCreated());
 
@@ -160,7 +136,7 @@ public class JobResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restJobMockMvc.perform(post("/api/jobs")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isBadRequest());
 
@@ -188,35 +164,22 @@ public class JobResourceIT {
     
     @SuppressWarnings({"unchecked"})
     public void getAllJobsWithEagerRelationshipsIsEnabled() throws Exception {
-        JobResource jobResource = new JobResource(jobServiceMock);
         when(jobServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
-        MockMvc restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
         restJobMockMvc.perform(get("/api/jobs?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         verify(jobServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllJobsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        JobResource jobResource = new JobResource(jobServiceMock);
-            when(jobServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-            MockMvc restJobMockMvc = MockMvcBuilders.standaloneSetup(jobResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+        when(jobServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         restJobMockMvc.perform(get("/api/jobs?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
-            verify(jobServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(jobServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -262,7 +225,7 @@ public class JobResourceIT {
         JobDTO jobDTO = jobMapper.toDto(updatedJob);
 
         restJobMockMvc.perform(put("/api/jobs")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isOk());
 
@@ -285,7 +248,7 @@ public class JobResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restJobMockMvc.perform(put("/api/jobs")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(jobDTO)))
             .andExpect(status().isBadRequest());
 
@@ -304,7 +267,7 @@ public class JobResourceIT {
 
         // Delete the job
         restJobMockMvc.perform(delete("/api/jobs/{id}", job.getId())
-            .accept(TestUtil.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

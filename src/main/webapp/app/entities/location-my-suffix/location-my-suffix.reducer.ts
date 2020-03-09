@@ -126,7 +126,6 @@ export const updateEntity: ICrudPutAction<ILocationMySuffix> = entity => async d
     type: ACTION_TYPES.UPDATE_LOCATION,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
   return result;
 };
 
@@ -136,7 +135,6 @@ export const deleteEntity: ICrudDeleteAction<ILocationMySuffix> = id => async di
     type: ACTION_TYPES.DELETE_LOCATION,
     payload: axios.delete(requestUrl)
   });
-  dispatch(getEntities());
   return result;
 };
 

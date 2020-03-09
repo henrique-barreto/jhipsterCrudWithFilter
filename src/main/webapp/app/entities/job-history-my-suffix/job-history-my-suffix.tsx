@@ -35,12 +35,6 @@ export const JobHistoryMySuffix = (props: IJobHistoryMySuffixProps) => {
   }, []);
 
   useEffect(() => {
-    if (props.updateSuccess) {
-      getAllEntities();
-    }
-  });
-
-  useEffect(() => {
     getAllEntities();
   }, [paginationState.activePage]);
 
