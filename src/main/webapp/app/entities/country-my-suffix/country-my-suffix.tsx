@@ -69,6 +69,9 @@ export const CountryMySuffix = (props: ICountryMySuffixProps) => {
                 <th className="hand" onClick={sort('createdDate')}>
                   Created Date <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('language')}>
+                  Language <FontAwesomeIcon icon="sort" />
+                </th>
                 <th>
                   Region <FontAwesomeIcon icon="sort" />
                 </th>
@@ -87,6 +90,7 @@ export const CountryMySuffix = (props: ICountryMySuffixProps) => {
                   <td>
                     <TextFormat type="date" value={country.createdDate} format={APP_DATE_FORMAT} />
                   </td>
+                  <td>{country.language}</td>
                   <td>{country.regionId ? <Link to={`region-my-suffix/${country.regionId}`}>{country.regionId}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

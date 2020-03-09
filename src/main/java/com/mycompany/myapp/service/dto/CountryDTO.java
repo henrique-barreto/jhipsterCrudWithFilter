@@ -3,21 +3,24 @@ package com.mycompany.myapp.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
+import com.mycompany.myapp.domain.enumeration.Language;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Country} entity.
  */
 public class CountryDTO implements Serializable {
-
+    
     private Long id;
 
     private String countryName;
 
     private ZonedDateTime createdDate;
 
+    private Language language;
+
 
     private Long regionId;
-
+    
     public Long getId() {
         return id;
     }
@@ -40,6 +43,14 @@ public class CountryDTO implements Serializable {
 
     public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public Long getRegionId() {
@@ -77,6 +88,7 @@ public class CountryDTO implements Serializable {
             "id=" + getId() +
             ", countryName='" + getCountryName() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
+            ", language='" + getLanguage() + "'" +
             ", regionId=" + getRegionId() +
             "}";
     }

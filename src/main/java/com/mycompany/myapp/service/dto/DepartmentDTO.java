@@ -9,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Department} entity.
  */
 public class DepartmentDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -21,7 +21,7 @@ public class DepartmentDTO implements Serializable {
      * A relationship
      */
     @ApiModelProperty(value = "A relationship")
-
+    
     public Long getId() {
         return id;
     }

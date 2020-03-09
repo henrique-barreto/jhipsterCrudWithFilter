@@ -98,6 +98,22 @@ export const CountryMySuffixUpdate = (props: ICountryMySuffixUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
+                <Label id="languageLabel" for="country-my-suffix-language">
+                  Language
+                </Label>
+                <AvInput
+                  id="country-my-suffix-language"
+                  type="select"
+                  className="form-control"
+                  name="language"
+                  value={(!isNew && countryEntity.language) || 'FRENCH'}
+                >
+                  <option value="FRENCH">FRENCH</option>
+                  <option value="ENGLISH">ENGLISH</option>
+                  <option value="SPANISH">SPANISH</option>
+                </AvInput>
+              </AvGroup>
+              <AvGroup>
                 <Label for="country-my-suffix-region">Region</Label>
                 <AvInput id="country-my-suffix-region" type="select" className="form-control" name="regionId">
                   <option value="" key="0" />

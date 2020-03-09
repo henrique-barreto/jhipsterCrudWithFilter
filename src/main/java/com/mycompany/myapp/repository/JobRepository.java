@@ -26,5 +26,4 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Query("select job from Job job left join fetch job.tasks where job.id =:id")
     Optional<Job> findOneWithEagerRelationships(@Param("id") Long id);
-
 }

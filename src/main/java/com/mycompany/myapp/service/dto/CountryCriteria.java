@@ -3,6 +3,7 @@ package com.mycompany.myapp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import com.mycompany.myapp.domain.enumeration.Language;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +23,24 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
  * fix type specific filters.
  */
 public class CountryCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering Language
+     */
+    public static class LanguageFilter extends Filter<Language> {
+
+        public LanguageFilter() {
+        }
+
+        public LanguageFilter(LanguageFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public LanguageFilter copy() {
+            return new LanguageFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -30,6 +49,8 @@ public class CountryCriteria implements Serializable, Criteria {
     private StringFilter countryName;
 
     private ZonedDateTimeFilter createdDate;
+
+    private LanguageFilter language;
 
     private LongFilter regionId;
 
@@ -40,6 +61,7 @@ public class CountryCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.countryName = other.countryName == null ? null : other.countryName.copy();
         this.createdDate = other.createdDate == null ? null : other.createdDate.copy();
+        this.language = other.language == null ? null : other.language.copy();
         this.regionId = other.regionId == null ? null : other.regionId.copy();
     }
 
@@ -72,6 +94,14 @@ public class CountryCriteria implements Serializable, Criteria {
         this.createdDate = createdDate;
     }
 
+    public LanguageFilter getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(LanguageFilter language) {
+        this.language = language;
+    }
+
     public LongFilter getRegionId() {
         return regionId;
     }
@@ -94,6 +124,7 @@ public class CountryCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(countryName, that.countryName) &&
             Objects.equals(createdDate, that.createdDate) &&
+            Objects.equals(language, that.language) &&
             Objects.equals(regionId, that.regionId);
     }
 
@@ -103,6 +134,7 @@ public class CountryCriteria implements Serializable, Criteria {
         id,
         countryName,
         createdDate,
+        language,
         regionId
         );
     }
@@ -113,6 +145,7 @@ public class CountryCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (countryName != null ? "countryName=" + countryName + ", " : "") +
                 (createdDate != null ? "createdDate=" + createdDate + ", " : "") +
+                (language != null ? "language=" + language + ", " : "") +
                 (regionId != null ? "regionId=" + regionId + ", " : "") +
             "}";
     }

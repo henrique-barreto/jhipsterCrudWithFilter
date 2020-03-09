@@ -9,14 +9,14 @@ import java.util.Objects;
  */
 @ApiModel(description = "Task entity.\n@author The JHipster team.")
 public class TaskDTO implements Serializable {
-
+    
     private Long id;
 
     private String title;
 
     private String description;
 
-
+    
     public Long getId() {
         return id;
     }

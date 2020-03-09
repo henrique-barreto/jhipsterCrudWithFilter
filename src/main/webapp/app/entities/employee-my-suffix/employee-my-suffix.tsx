@@ -35,12 +35,6 @@ export const EmployeeMySuffix = (props: IEmployeeMySuffixProps) => {
   }, []);
 
   useEffect(() => {
-    if (props.updateSuccess) {
-      getAllEntities();
-    }
-  });
-
-  useEffect(() => {
     getAllEntities();
   }, [paginationState.activePage]);
 

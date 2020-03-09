@@ -6,7 +6,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.time.ZonedDateTime;
+
+import com.mycompany.myapp.domain.enumeration.Language;
 
 /**
  * A Country.
@@ -27,6 +30,10 @@ public class Country implements Serializable {
 
     @Column(name = "created_date")
     private ZonedDateTime createdDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "language")
+    private Language language;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -67,6 +74,19 @@ public class Country implements Serializable {
         this.createdDate = createdDate;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
+    public Country language(Language language) {
+        this.language = language;
+        return this;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
     public Region getRegion() {
         return region;
     }
@@ -103,6 +123,7 @@ public class Country implements Serializable {
             "id=" + getId() +
             ", countryName='" + getCountryName() + "'" +
             ", createdDate='" + getCreatedDate() + "'" +
+            ", language='" + getLanguage() + "'" +
             "}";
     }
 }

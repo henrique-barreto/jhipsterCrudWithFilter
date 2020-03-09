@@ -9,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Job} entity.
  */
 public class JobDTO implements Serializable {
-
+    
     private Long id;
 
     private String jobTitle;
@@ -18,11 +18,10 @@ public class JobDTO implements Serializable {
 
     private Long maxSalary;
 
-
     private Set<TaskDTO> tasks = new HashSet<>();
 
     private Long employeeId;
-
+    
     public Long getId() {
         return id;
     }
@@ -99,6 +98,7 @@ public class JobDTO implements Serializable {
             ", jobTitle='" + getJobTitle() + "'" +
             ", minSalary=" + getMinSalary() +
             ", maxSalary=" + getMaxSalary() +
+            ", tasks='" + getTasks() + "'" +
             ", employeeId=" + getEmployeeId() +
             "}";
     }

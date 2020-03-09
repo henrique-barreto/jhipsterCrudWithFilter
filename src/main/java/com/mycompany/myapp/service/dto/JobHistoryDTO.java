@@ -9,7 +9,7 @@ import com.mycompany.myapp.domain.enumeration.Language;
  * A DTO for the {@link com.mycompany.myapp.domain.JobHistory} entity.
  */
 public class JobHistoryDTO implements Serializable {
-
+    
     private Long id;
 
     private Instant startDate;
@@ -24,7 +24,7 @@ public class JobHistoryDTO implements Serializable {
     private Long departmentId;
 
     private Long employeeId;
-
+    
     public Long getId() {
         return id;
     }

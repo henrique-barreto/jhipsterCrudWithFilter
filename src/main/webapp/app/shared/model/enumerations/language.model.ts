@@ -1,5 +1,5 @@
 export const enum Language {
-  FRENCH,
-  ENGLISH,
-  SPANISH
+  FRENCH = 'FRENCH',
+  ENGLISH = 'ENGLISH',
+  SPANISH = 'SPANISH'
 }

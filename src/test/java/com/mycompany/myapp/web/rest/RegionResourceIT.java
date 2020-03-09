@@ -6,25 +6,19 @@ import com.mycompany.myapp.repository.RegionRepository;
 import com.mycompany.myapp.service.RegionService;
 import com.mycompany.myapp.service.dto.RegionDTO;
 import com.mycompany.myapp.service.mapper.RegionMapper;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.mycompany.myapp.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,6 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link RegionResource} REST controller.
  */
 @SpringBootTest(classes = JhipsterCrudWithFilterApp.class)
+
+@AutoConfigureMockMvc
+@WithMockUser
 public class RegionResourceIT {
 
     private static final String DEFAULT_REGION_NAME = "AAAAAAAAAA";
@@ -49,35 +46,12 @@ public class RegionResourceIT {
     private RegionService regionService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restRegionMockMvc;
 
     private Region region;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final RegionResource regionResource = new RegionResource(regionService);
-        this.restRegionMockMvc = MockMvcBuilders.standaloneSetup(regionResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -115,7 +89,7 @@ public class RegionResourceIT {
         // Create the Region
         RegionDTO regionDTO = regionMapper.toDto(region);
         restRegionMockMvc.perform(post("/api/regions")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isCreated());
 
@@ -137,7 +111,7 @@ public class RegionResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRegionMockMvc.perform(post("/api/regions")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isBadRequest());
 
@@ -200,7 +174,7 @@ public class RegionResourceIT {
         RegionDTO regionDTO = regionMapper.toDto(updatedRegion);
 
         restRegionMockMvc.perform(put("/api/regions")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isOk());
 
@@ -221,7 +195,7 @@ public class RegionResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRegionMockMvc.perform(put("/api/regions")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(regionDTO)))
             .andExpect(status().isBadRequest());
 
@@ -240,7 +214,7 @@ public class RegionResourceIT {
 
         // Delete the region
         restRegionMockMvc.perform(delete("/api/regions/{id}", region.getId())
-            .accept(TestUtil.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

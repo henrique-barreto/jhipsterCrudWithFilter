@@ -36,5 +36,6 @@
     "readOnly": false,
     "clientRootFolder": "",
     "applications": "*",
-    "angularJSSuffix": "mySuffix"
+    "angularJSSuffix": "mySuffix",
+    "embedded": false
 }
